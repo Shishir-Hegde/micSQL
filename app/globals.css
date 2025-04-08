@@ -68,7 +68,6 @@
   --background-end-rgb: 0, 0, 0;
   /* Updated font variables for better specificity */
   --font-orbitron: "Orbitron", sans-serif !important;
-  --font-tektur: "Tektur", sans-serif !important;
 }
 
 body {
@@ -139,12 +138,9 @@ nav,
   }
 }
 
+/* Remove Tektur font class */
 .font-orbitron {
   font-family: var(--font-orbitron) !important;
-}
-
-.font-tektur {
-  font-family: var(--font-tektur) !important;
 }
 
 /* Add a global font class that can be applied to the body or specific elements */

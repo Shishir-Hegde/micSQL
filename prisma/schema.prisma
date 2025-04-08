@@ -18,6 +18,7 @@ model User {
   userId        Int         @unique @default(autoincrement())
   name          String
   password      String        // Hashed password
+  profilePicture String?      // Base64 encoded profile picture
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   role          UserRole       @default(USER)

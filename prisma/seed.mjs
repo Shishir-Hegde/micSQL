@@ -1,4 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+import fs from "fs";
+import path from "path";
+import sharp from "sharp";
 // import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -27,10 +30,29 @@ async function main() {
   // const hashedPassword = await bcrypt.hash("admin123", salt);
   const hashedPassword = "admin123"; //Test time password
 
+  // Function to process and convert image to base64
+  const processImage = async (imagePath) => {
+    try {
+      const buffer = await fs.promises.readFile(imagePath);
+      const resizedBuffer = await sharp(buffer)
+        .resize(500, 500, {
+          fit: "cover",
+          position: "center",
+        })
+        .png()
+        .toBuffer();
+      return `data:image/png;base64,${resizedBuffer.toString("base64")}`;
+    } catch (err) {
+      console.error(`Error processing image ${imagePath}:`, err);
+      return null;
+    }
+  };
+
+  // Create admin user
   await prisma.user.upsert({
     where: { userId: 42069 },
     update: {
-      password: hashedPassword, // Update password if user exists
+      password: hashedPassword,
     },
     create: {
       name: "Admin User",
@@ -100,13 +122,22 @@ async function main() {
     },
   ];
 
-  // Create test users
-  for (const user of testUsers) {
+  // Create test users with profile pictures
+  for (const [index, user] of testUsers.entries()) {
+    const imagePath = path.join(
+      process.cwd(),
+      "public",
+      "pfp",
+      `user${index + 1}.png`
+    );
+    const profilePicture = await processImage(imagePath);
+
     const createdUser = await prisma.user.create({
       data: {
         name: user.name,
         password: user.password,
         role: user.role,
+        profilePicture,
         settings: {
           create: user.settings,
         },

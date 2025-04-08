@@ -7,17 +7,17 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
     // Force a font refresh on client side
     document.body.classList.add("fonts-loaded");
 
-    // Add Jaro font directly to the document to ensure it's always loaded
+    // Add Orbitron font directly to the document to ensure it's always loaded
     const style = document.createElement("style");
     style.textContent = `
-      @import url("https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap");
       
-      .font-jaro {
-        font-family: "Jaro", sans-serif !important;
+      .font-orbitron {
+        font-family: "Orbitron", sans-serif !important;
       }
       
       h1, h2, h3, h4, h5, h6 {
-        font-family: "Jaro", sans-serif !important;
+        font-family: "Orbitron", sans-serif !important;
       }
     `;
     document.head.appendChild(style);
