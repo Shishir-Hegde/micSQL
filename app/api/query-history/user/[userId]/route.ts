@@ -1,29 +1,35 @@
-import { PrismaClient } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 // Get all query histories for a specific user
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { userId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    // const { userId } = params;
-    const targetUserId = params.userId;
+
+    // Debug logging
+    const { userId } = await params;
+    // Get the userId from the session
+    const targetUserId = session.user.id;
+    // console.log("Session user:", session.user);
+    // console.log("Params userId:", userId);
 
     // Security check: Only allow access to your own queries or if you're an admin
-    if (session.user.id !== targetUserId && session.user.role !== "ADMIN") {
-      return NextResponse.json(
-        { error: "You can only access your own query history" },
-        { status: 403 }
-      );
+    if (targetUserId !== userId && session.user.role !== "AD  MIN") {
+      console.log("Access denied - userId mismatch:", {
+        targetUserId,
+        paramsUserId: params.userId,
+      });
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // Fetch all queries for the specified user
@@ -34,16 +40,16 @@ export async function GET(
       orderBy: {
         createdAt: "desc",
       },
-      include: {
-        visualization: true,
-      },
     });
 
-    return NextResponse.json({ queries });
+    console.log("Found queries:", queries);
+
+    // Return an empty array if no queries found
+    return NextResponse.json(queries || []);
   } catch (error) {
-    console.error("Error fetching user query history:", error);
+    console.error("Error fetching query history:", error);
     return NextResponse.json(
-      { error: "Failed to fetch query history" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

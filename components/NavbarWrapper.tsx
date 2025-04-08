@@ -1,7 +1,13 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { Navbar, NavBody, NavItems, NavbarLogo } from "@/components/navbar";
+import { useSession, signOut } from "next-auth/react";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  NavbarLogo,
+  NavbarButton,
+} from "@/components/navbar";
 
 export default function NavbarWrapper({
   children,
@@ -29,6 +35,15 @@ export default function NavbarWrapper({
         <NavBody>
           <NavbarLogo />
           <NavItems items={navItems} />
+          <div className="ml-auto">
+            <NavbarButton
+              onClick={() => signOut()}
+              variant="secondary"
+              className="px-4 py-2 text-white"
+            >
+              Logout
+            </NavbarButton>
+          </div>
         </NavBody>
       </Navbar>
       <main className="container mx-auto px-4 py-8">{children}</main>

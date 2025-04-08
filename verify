@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Check if both arguments are provided
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 <user_id> <file_path>"
+  exit 1
+fi
+
+# Assign arguments to variables
+USER_ID=$1
+FILE_PATH=$2
+
+# Check if the file exists
+if [ ! -f "$FILE_PATH" ]; then
+  echo "Error: File '$FILE_PATH' does not exist."
+  exit 1
+fi
+
+# Send the verify request using curl
+curl -X POST http://localhost:8000/verify \
+  -F "user_id=$USER_ID" \
+  -F "file=@$FILE_PATH"
+
+echo ""
