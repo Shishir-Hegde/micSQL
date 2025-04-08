@@ -23,11 +23,7 @@ export const GET = async (
     }
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: {
-        id: true,
-        name: true,
-        role: true,
-        password: false,
+      include: {
         settings: true,
       },
     });
@@ -36,7 +32,9 @@ export const GET = async (
       return NextResponse.json({ error: "user not found" }, { status: 404 });
     }
 
-    return NextResponse.json(user);
+    // Remove password from response
+    const { password, ...userWithoutPassword } = user;
+    return NextResponse.json(userWithoutPassword);
   } catch (err) {
     console.log(err);
     return NextResponse.json({ error: "error fetching user" }, { status: 500 });

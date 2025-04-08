@@ -27,7 +27,7 @@ export default function RootLayout({
         />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&family=Tektur:wght@400..900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
         />
       </head>
       <body className={inter.className}>
