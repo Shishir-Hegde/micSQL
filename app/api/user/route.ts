@@ -25,6 +25,7 @@ export const GET = async () => {
         name: true,
         role: true,
         createdAt: true,
+        profilePicture: true,
       },
     });
     return NextResponse.json(response);

@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { IconUpload, IconTrash } from "@tabler/icons-react";
+import { VoiceEnrollment } from "@/components/voice-enrollment";
 
 interface UserSettings {
   language: string;
@@ -251,6 +252,42 @@ export default function AccountSettings() {
                   className="data-[state=checked]:bg-zinc-700 data-[state=unchecked]:bg-red-500"
                 />
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Voice Settings Card */}
+        <Card className="bg-zinc-900 border border-zinc-800">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-zinc-100">
+              Voice Settings
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label className="text-sm font-medium text-zinc-400">
+                    Voice Authentication
+                  </Label>
+                  <p className="text-sm text-zinc-500">
+                    Enable voice-based authentication
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.settings?.voiceEnabled}
+                  onCheckedChange={() => handleToggle("voiceEnabled")}
+                />
+              </div>
+
+              {settings.settings?.voiceEnabled && (
+                <div className="mt-6">
+                  <Label className="text-sm font-medium text-zinc-400 mb-4 block">
+                    Voice Profile Enrollment
+                  </Label>
+                  <VoiceEnrollment />
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

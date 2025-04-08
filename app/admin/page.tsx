@@ -368,11 +368,30 @@ export default function AdminControls() {
                   >
                     <CardContent className="pt-6">
                       <div className="flex justify-between items-center">
-                        <div>
-                          <p className="font-medium">{user.name}</p>
-                          <p className="text-sm text-gray-500">
-                            Created: {formatDate(user.createdAt)}
-                          </p>
+                        <div className="flex items-center space-x-4">
+                          <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                            {user.profilePicture ? (
+                              <img
+                                src={user.profilePicture}
+                                alt={user.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-zinc-800 flex items-center justify-center">
+                                <span className="text-lg text-zinc-600">
+                                  {user.name.charAt(0).toUpperCase()}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <p className="font-medium text-zinc-100">
+                              {user.name}
+                            </p>
+                            <p className="text-sm text-zinc-400">
+                              Created: {formatDate(user.createdAt)}
+                            </p>
+                          </div>
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="flex items-center gap-2">
