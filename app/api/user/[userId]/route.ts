@@ -28,6 +28,7 @@ export const GET = async (
         name: true,
         role: true,
         password: false,
+        settings: true,
       },
     });
 
@@ -59,22 +60,61 @@ export const PATCH = async (
       );
     }
 
-    const { name, password, role } = await req.json();
+    const { name, password, role, voiceEnabled, autoSuggestEnabled } =
+      await req.json();
     const { userId } = params;
 
-    console.log("PATCH request received:", { userId, name, role });
+    console.log("PATCH request received:", {
+      userId,
+      name,
+      role,
+      voiceEnabled,
+      autoSuggestEnabled,
+    });
 
     // Only include fields that are provided in the update
-    const updateData: { name?: string; password?: string; role?: string } = {};
+    const updateData: {
+      name?: string;
+      password?: string;
+      role?: "USER" | "ADMIN";
+      settings?: {
+        update: {
+          voiceEnabled?: boolean;
+          autoSuggestEnabled?: boolean;
+        };
+      };
+    } = {};
+
     if (name !== undefined) updateData.name = name;
     if (password !== undefined) updateData.password = password;
-    if (role !== undefined) updateData.role = role;
+    if (role !== undefined) {
+      if (role !== "USER" && role !== "ADMIN") {
+        return NextResponse.json(
+          { error: "Invalid role value" },
+          { status: 400 }
+        );
+      }
+      updateData.role = role;
+    }
+
+    // Handle user settings updates
+    if (voiceEnabled !== undefined || autoSuggestEnabled !== undefined) {
+      updateData.settings = {
+        update: {
+          ...(voiceEnabled !== undefined && { voiceEnabled }),
+          ...(autoSuggestEnabled !== undefined && { autoSuggestEnabled }),
+        },
+      };
+    }
 
     console.log("Update data:", updateData);
 
     const response = await prisma.user.update({
       where: { id: userId },
       data: updateData,
+      include: {
+        settings: true,
+      },
     });
 
     console.log("Prisma response:", response);

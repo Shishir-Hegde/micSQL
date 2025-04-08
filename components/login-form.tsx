@@ -5,7 +5,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export function LoginForm() {
-  const [username, setUsername] = useState("");
+  const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -16,7 +16,7 @@ export function LoginForm() {
 
     try {
       const result = await signIn("credentials", {
-        userId: parseInt(username),
+        userId: parseInt(employeeId),
         password,
         redirect: false,
       });
@@ -42,17 +42,17 @@ export function LoginForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
           <label
-            htmlFor="username"
+            htmlFor="employeeId"
             className="text-sm font-medium text-foreground font-jaro"
           >
-            Username
+            Employee ID
           </label>
           <input
-            id="username"
+            id="employeeId"
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
+            value={employeeId}
+            onChange={(e) => setEmployeeId(e.target.value)}
+            placeholder="Enter your Employee ID"
             className="form-input font-jaro bg-[#A49694] text-[#021013] placeholder:text-[#021013]/60"
             required
           />
