@@ -20,7 +20,7 @@ export default function Dashboard() {
       router.push("/login");
     }
   }, [status, router]);
-
+//load
   if (status === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center theme-bg-dark">
