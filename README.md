@@ -15,8 +15,10 @@
 
 ### 🛠️ Tech Stack:
 **Whisper**, **PyAnnote**, **Gemini (LLM)**, **PostgreSQL**, **Next.js**, **Express.js**, **TailwindCSS**, **Chart.js / D3.js**
-### System Design: 
+### 📡 System Design: 
+<div align="center">
 <img src="https://github.com/user-attachments/assets/32ffccef-8155-469a-a533-7500e3be7ccf"/>
+</div>
 
 # 🚀 HackToFuture 3.0 Repository Setup Guide
 #### To track your progress and collaborate effectively, every team must fork the official repository and follow the steps below.
