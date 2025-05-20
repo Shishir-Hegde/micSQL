@@ -115,7 +115,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
     </motion.div>
   );
 };
-
+//links here
 export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
 
