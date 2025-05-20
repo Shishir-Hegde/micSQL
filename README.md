@@ -1,11 +1,11 @@
 
 # SONEXIS – Transforming Voice Commands into Visual Insights
-#### **Sonexis** is an intelligent voice-based analytics platform that allows non-technical users to access real-time business insights without writing a single line of SQL. By combining **speech-to-text**, **LLMs**, and **data visualization**, MicSQL turns natural language voice queries into interactive dashboards — making data truly accessible for business leaders.
+
 <div align="center">
 <img width="200" height="200" src="https://github.com/user-attachments/assets/62c4a017-ae48-4b8f-a07f-fa2b45153605" alt="sonexis logo"/>
 </div>
 
-
+#### **Sonexis** is an intelligent voice-based analytics platform that allows non-technical users to access real-time business insights without writing a single line of SQL. By combining **speech-to-text**, **LLMs**, and **data visualization**, MicSQL turns natural language voice queries into interactive dashboards — making data truly accessible for business leaders.
 ### 🔍 Key Features:
 - 🎤 **Voice-Driven Access** – Query your database using natural speech, powered by Whisper and a custom voice identity model.
 - 🧠 **AI-Powered SQL Generation** – Converts spoken queries into optimized SQL using a schema-aware LLM (e.g., Gemini).
