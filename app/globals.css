@@ -1,26 +1,297 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+/* Import Orbitron from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap");
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme inline {
+  --shadow-input: 0px 2px 3px -1px rgba(0, 0, 0, 0.1),
+    0px 1px 0px 0px rgba(25, 28, 33, 0.02),
+    0px 0px 0px 1px rgba(25, 28, 33, 0.08);
 }
+
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --radius: 0;
+  --background: var(--color-zinc-800);
+  --foreground: #bfff00;
+  --card: #000000;
+  --card-foreground: #bfff00;
+  --popover: #000000;
+  --popover-foreground: #bfff00;
+  --primary: #00e1ff;
+  --primary-foreground: #000000;
+  --secondary: #00e1ff;
+  --secondary-foreground: #000000;
+  --muted: #1a1a1a;
+  --muted-foreground: #bfff00;
+  --accent: #00e1ff;
+  --accent-foreground: #000000;
+  --destructive: #aa0000;
+  --border: rgba(191, 255, 0, 0.15);
+  --input: rgba(191, 255, 0, 0.15);
+  --ring: #00e1ff;
+  --chart-1: #00e1ff;
+  --chart-2: #bfff00;
+  --chart-3: #000000;
+  --chart-4: #00e1ff;
+  --chart-5: #bfff00;
+  --foreground-rgb: 191, 255, 0;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+  /* Updated font variables for better specificity */
+  --font-orbitron: "Orbitron", sans-serif !important;
+  --card-shadow: 0 0 10px rgba(191, 255, 0, 0.3),
+    0 0 20px rgba(191, 255, 0, 0.2);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Ensure all elements use Orbitron by default */
+* {
+  font-family: var(--font-orbitron) !important;
+}
+
+/* Specific styles for form elements */
+input,
+textarea,
+select,
+button {
+  font-family: var(--font-orbitron) !important;
+}
+
+/* Navbar specific styles */
+nav,
+.navbar,
+.nav-item,
+.nav-link {
+  font-family: var(--font-orbitron) !important;
+}
+
+/* Form input specific styles */
+.form-input {
+  @apply w-full px-3 py-2 border-0 hover:outline-none hover:ring-0;
+  box-shadow: 3px 3px 0px #ff10f0;
+  transition: box-shadow 0.2s ease;
+  font-family: var(--font-orbitron) !important;
+}
+
+.form-input:hover {
+  box-shadow: 7px 7px 0px #ff10f0;
+}
+
+.dark {
+  /* Using the same colors as root for consistency */
+  --background: #000000;
+  --foreground: #bfff00;
+  --card: #000000;
+  --card-foreground: #bfff00;
+  --popover: #000000;
+  --popover-foreground: #bfff00;
+  --primary: #00e1ff;
+  --primary-foreground: #000000;
+  --secondary: #00e1ff;
+  --secondary-foreground: #000000;
+  --muted: #1a1a1a;
+  --muted-foreground: #bfff00;
+  --accent: #00e1ff;
+  --accent-foreground: #000000;
+  --destructive: #aa0000;
+  --border: rgba(191, 255, 0, 0.15);
+  --input: rgba(191, 255, 0, 0.15);
+  --ring: #00e1ff;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Remove Tektur font class */
+.font-orbitron {
+  font-family: var(--font-orbitron) !important;
+}
+
+/* Add a global font class that can be applied to the body or specific elements */
+.app-font {
+  font-family: var(--font-orbitron) !important;
+}
+
+/* Ensure headings use Orbitron by default */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-orbitron) !important;
+}
+
+/* Common form styles */
+/* .form-input {
+  @apply w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF10F0];
+} */
+
+.btn-primary {
+  @apply bg-[#00e1ff] text-[#000000] py-2 px-4 hover:bg-[#00c7e6] transition;
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+.btn-secondary {
+  @apply bg-[#bfff00] text-[#000000] py-2 px-4 hover:bg-[#a6d900] transition;
+  box-shadow: 0 0 10px rgba(191, 255, 0, 0.3);
+}
+
+/* Simplified theme classes with consistent colors */
+.theme-bg-primary {
+  background-color: #00e1ff;
+  color: #000000;
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+.theme-bg-secondary {
+  background-color: #bfff00;
+  color: #000000;
+  box-shadow: 0 0 10px rgba(191, 255, 0, 0.3);
+}
+
+.theme-bg-accent {
+  background-color: #00e1ff;
+  color: #000000;
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+.theme-bg-dark {
+  background-color: #000000;
+  color: #bfff00;
+  box-shadow: 0 0 10px rgba(191, 255, 0, 0.3);
+}
+
+.theme-border {
+  border-color: #00e1ff;
+}
+
+.theme-text-primary {
+  color: #00e1ff;
+}
+
+.theme-text-secondary {
+  color: #bfff00;
+}
+
+.theme-text-accent {
+  color: #00e1ff;
+}
+
+.theme-text-dark {
+  color: #000000;
+}
+
+/* Hover effects for interactive elements */
+.hover-primary:hover {
+  @apply bg-[#00c7e6] text-[#000000];
+}
+
+.hover-secondary:hover {
+  @apply bg-[#a6d900] text-[#000000];
+}
+
+@layer base {
+  :root {
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+/* Update card styles for cyberpunk look */
+.card {
+  @apply bg-card text-card-foreground;
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(191, 255, 0, 0.1);
+}
+
+/* Update button styles */
+.btn-primary {
+  @apply bg-[#00e1ff] text-[#000000] py-2 px-4 hover:bg-[#00c7e6] transition;
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+.btn-secondary {
+  @apply bg-[#bfff00] text-[#000000] py-2 px-4 hover:bg-[#a6d900] transition;
+  box-shadow: 0 0 10px rgba(191, 255, 0, 0.3);
+}
+
+/* Update theme classes */
+.theme-bg-primary {
+  background-color: #00e1ff;
+  color: #000000;
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+.theme-bg-secondary {
+  background-color: #bfff00;
+  color: #000000;
+  box-shadow: 0 0 10px rgba(191, 255, 0, 0.3);
+}
+
+.theme-bg-accent {
+  background-color: #00e1ff;
+  color: #000000;
+  box-shadow: 0 0 10px rgba(0, 225, 255, 0.3);
+}
+
+.theme-bg-dark {
+  background-color: var(--color-neutral-900);
+  color: #bfff00;
+  box-shadow: 0 0 10px rgba(191, 255, 0, 0.3);
 }

@@ -1,14 +1,221 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/main"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  userId        Int            @unique @default(autoincrement())
+  name          String
+  email         String?      @unique
+  password      String        // Hashed password
+  profilePicture String?      // Base64 encoded profile picture
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  role          UserRole       @default(USER)
+  
+  
+  queryHistory  QueryHistory[]
+  dashboards    Dashboard[]
+  settings      UserSettings?
+
+  @@map("users")
+}
+
+
+model DatabaseMetadata {
+  id          String           @id @default(cuid())
+  tableName   String           @unique
+  description String?
+  isVisible   Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  columns     ColumnMetadata[]
+
+  @@map("database_metadata")
+}
+
+model ColumnMetadata {
+  id                 String           @id @default(cuid())
+  databaseMetadataId String
+  columnName         String
+  dataType           String
+  description        String?
+  isIdentifier       Boolean          @default(false)
+  isSensitive        Boolean          @default(false)
+  databaseMetadata   DatabaseMetadata @relation(fields: [databaseMetadataId], references: [id], onDelete: Cascade)
+
+  @@unique([databaseMetadataId, columnName])
+  @@map("column_metadata")
+}
+
+model QueryHistory {
+  id             String         @id @default(cuid())
+  userId         String
+  userQuery      String
+  sqlQuery       String
+  relatedQueries Json?
+  results        Json?
+  executionTime  Int?
+  successful     Boolean        @default(true)
+  errorMessage   String?
+  createdAt      DateTime       @default(now())
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  visualization  Visualization?
+
+  @@map("query_history")
+}
+
+model Visualization {
+  id           String       @id @default(cuid())
+  queryId      String       @unique
+  chartType    String
+  chartOptions Json?
+  title        String?
+  description  String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  query        QueryHistory @relation(fields: [queryId], references: [id], onDelete: Cascade)
+
+  @@map("visualizations")
+}
+
+model Dashboard {
+  id        String            @id @default(cuid())
+  userId    String
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  widgets   DashboardWidget[]
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("dashboards")
+}
+
+model DashboardWidget {
+  id           String    @id @default(cuid())
+  dashboardId  String
+  title        String
+  description  String?
+  sqlQuery     String
+  chartType    String
+  chartOptions Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  dashboard    Dashboard @relation(fields: [dashboardId], references: [id], onDelete: Cascade)
+
+  @@map("dashboard_widgets")
+}
+
+model UserSettings {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  language           String   @default("en")
+  voiceEnabled       Boolean  @default(true)
+  autoSuggestEnabled Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+model customers {
+  customer_id        Int       @id @default(autoincrement())
+  first_name         String    @db.VarChar(50)
+  last_name          String    @db.VarChar(50)
+  email              String    @unique @db.VarChar(100)
+  phone              String?   @db.VarChar(50)
+  registration_date  DateTime  @db.Date
+  total_spent        Decimal?  @default(0) @db.Decimal(12, 2)
+  loyalty_points     Int?      @default(0)
+  segment            String?   @db.VarChar(50)
+  last_purchase_date DateTime? @db.Date
+  orders             orders[]
+}
+
+model employee_benefits {
+  benefit_id                  Int        @id @default(autoincrement())
+  employee_id                 Int?
+  health_insurance_plan       String     @db.VarChar(50)
+  health_insurance_cost       Decimal    @db.Decimal(10, 2)
+  retirement_contribution_pct Decimal    @db.Decimal(5, 2)
+  paid_time_off_days          Int
+  sick_leave_days             Int
+  tuition_reimbursement       Decimal?   @db.Decimal(10, 2)
+  life_insurance_coverage     Decimal    @db.Decimal(10, 2)
+  dental_coverage             Boolean?   @default(false)
+  vision_coverage             Boolean?   @default(false)
+  wellness_stipend            Decimal?   @db.Decimal(10, 2)
+  employees                   employees? @relation(fields: [employee_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model employees {
+  employee_id       Int                 @id @default(autoincrement())
+  first_name        String              @db.VarChar(50)
+  last_name         String              @db.VarChar(50)
+  email             String              @unique @db.VarChar(100)
+  department        String              @db.VarChar(50)
+  position          String              @db.VarChar(50)
+  hire_date         DateTime            @db.Date
+  salary            Decimal             @db.Decimal(10, 2)
+  commission_pct    Decimal?            @db.Decimal(4, 2)
+  manager_id        Int?
+  performance_score Decimal?            @db.Decimal(3, 1)
+  employee_benefits employee_benefits[]
+  sales             sales[]
+}
+
+model inventory {
+  product_id        Int      @id @default(autoincrement())
+  product_name      String   @db.VarChar(100)
+  category          String   @db.VarChar(50)
+  supplier          String   @db.VarChar(100)
+  stock_quantity    Int
+  cost_price        Decimal  @db.Decimal(10, 2)
+  selling_price     Decimal  @db.Decimal(10, 2)
+  reorder_level     Int
+  last_restock_date DateTime @db.Date
+  profit_margin     Decimal  @db.Decimal(5, 2)
+  sales             sales[]
+}
+
+model orders {
+  order_id           Int        @id @default(autoincrement())
+  customer_id        Int?
+  order_date         DateTime   @db.Date
+  total_amount       Decimal    @db.Decimal(10, 2)
+  status             String     @db.VarChar(20)
+  payment_method     String     @db.VarChar(50)
+  shipping_address   String
+  tracking_number    String?    @db.VarChar(50)
+  estimated_delivery DateTime?  @db.Date
+  customers          customers? @relation(fields: [customer_id], references: [customer_id], onDelete: NoAction, onUpdate: NoAction)
+  sales              sales[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model sales {
+  sale_id           Int        @id @default(autoincrement())
+  employee_id       Int?
+  order_id          Int?
+  product_id        Int?
+  quantity          Int
+  unit_price        Decimal    @db.Decimal(10, 2)
+  sale_date         DateTime   @db.Date
+  commission_amount Decimal?   @db.Decimal(10, 2)
+  profit            Decimal    @db.Decimal(10, 2)
+  customer_rating   Int?
+  employees         employees? @relation(fields: [employee_id], references: [employee_id], onDelete: NoAction, onUpdate: NoAction)
+  orders            orders?    @relation(fields: [order_id], references: [order_id], onDelete: NoAction, onUpdate: NoAction)
+  inventory         inventory? @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
